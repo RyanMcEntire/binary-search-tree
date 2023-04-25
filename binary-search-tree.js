@@ -14,7 +14,7 @@ class Tree {
         // better suited for the specific solution.
         // The inclusion of both is for learning purposes.
         this.rootIterative = this.buildTreeIterative(sortedArray);
-        this.rootRecursive = this.buildTreeRecursive(sortedArray);
+        this.root = this.buildTreeRecursive(sortedArray);
     }
 
     buildTreeIterative(array) {
@@ -95,17 +95,57 @@ class Tree {
         return newArray;
     }
 
-    insert() {}
+    insert(value, currentNode = this.root) {
+        if (currentNode === null) {
+            currentNode = new Node(value);
+            return currentNode;
+        }
 
-    delete() {}
+        if (currentNode.data === value) return;
+
+        if (value < currentNode.data) {
+            currentNode.left = this.insert(value, currentNode.left);
+        } else currentNode.right = this.insert(value, currentNode.right);
+
+        return currentNode;
+    }
+
+    delete(value, currentNode = this.root) {
+        if (currentNode === null) return currentNode;
+        if (value < currentNode.data) {
+            currentNode.left = this.delete(value, currentNode.left);
+        } else if (value > currentNode.data) {
+            currentNode.right = this.delete(value, currentNode.right);
+        } else {
+            if (currentNode.left === null) {
+                return currentNode.right;
+            } else if (this.root.right === null) {
+                return this.root.left;
+            }
+
+            currentNode.data = this.minValue(currentNode.right);
+            currentNode.data = this.delete(value, currentNode.right);
+        }
+        return currentNode;
+    }
+
+    minValue(root) {
+        let minV = root.data;
+        while (root.left != null) {
+            minV = root.left.data;
+        }
+    }
 }
 const testArray = [
     1, 7, 4, 6, 23, 11, 8, 10, 9, 4, 43, 3, 5, 7, 9, 67, 6345, 324,
 ];
-const myTree = new Tree(testArray);
 
-console.log('rootIterative -->', myTree.rootIterative);
-console.log('rootRecursive -->', myTree.rootRecursive);
+// [ 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 23, 43, 67, 324, 6345]
+
+const myTree = new Tree(testArray);
+myTree.insert(35);
+myTree.insert(500);
+myTree.delete(8);
 
 const prettyPrint = (node, prefix = '', isLeft = true) => {
     if (node === null) {
@@ -121,4 +161,4 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 };
 
 prettyPrint(myTree.rootIterative);
-prettyPrint(myTree.rootRecursive);
+prettyPrint(myTree.root);
