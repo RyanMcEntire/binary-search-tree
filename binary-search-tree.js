@@ -164,6 +164,19 @@ class Tree {
     }
     if (noFunc.length > 0) return noFunc;
   }
+
+  inOrder(func, currentNode = this.root, noFuncList = []) {
+    if (currentNode === null) return;
+    this.inOrder(func, currentNode.left);
+    if (func && typeof func == 'function') {
+      currentNode.data = func(currentNode.data);
+    } else {
+      noFuncList.push(currentNode.data);
+    }
+    this.inOrder(func, currentNode.right);
+
+    if (noFuncList.length > 0) return noFuncList;
+  }
 }
 const testArray = [
   1, 7, 4, 6, 23, 11, 8, 10, 9, 4, 43, 3, 5, 7, 9, 67, 6345, 324,
@@ -181,9 +194,14 @@ function timesTwo(value) {
   return value * 2;
 }
 
+function plusOne(value) {
+  return value + 1;
+}
+
 // console.log('levelOrder', myTree.levelOrder(timesTwo));
 
 myTree.levelOrder(timesTwo);
+myTree.inOrder(plusOne);
 
 const prettyPrint = (node, prefix = '', isLeft = true) => {
   if (node === null) {
