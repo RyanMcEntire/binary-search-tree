@@ -137,7 +137,7 @@ class Tree {
   }
 
   find(value, currentNode = this.root) {
-    if (currentNode === null || currentNode.data === value) return currentNode
+    if (currentNode === null || currentNode.data === value) return currentNode;
     if (currentNode.data > value) {
       return this.find(value, currentNode.left);
     } else {
@@ -145,11 +145,24 @@ class Tree {
     }
   }
 
-  levelOrder(function(value), ) {
-    let currentNode = this.root
-    let q = null
-    if (currentNode === null) return currentNode
-
+  levelOrder(func) {
+    let q = [this.root];
+    let noFunc = [];
+    while (q.length > 0) {
+      const currentNode = q.shift();
+      if (func && typeof func == 'function') {
+        currentNode.data = func(currentNode.data);
+      } else {
+        noFunc.push(currentNode.data);
+      }
+      if (currentNode.left) {
+        q.push(currentNode.left);
+      }
+      if (currentNode.right) {
+        q.push(currentNode.right);
+      }
+    }
+    if (noFunc.length > 0) return noFunc;
   }
 }
 const testArray = [
@@ -162,7 +175,15 @@ const myTree = new Tree(testArray);
 myTree.insert(35);
 myTree.insert(500);
 myTree.delete(8);
-console.log('find 23 -->', myTree.find(23))
+console.log('find 23 -->', myTree.find(23));
+
+function timesTwo(value) {
+  return value * 2;
+}
+
+// console.log('levelOrder', myTree.levelOrder(timesTwo));
+
+myTree.levelOrder(timesTwo);
 
 const prettyPrint = (node, prefix = '', isLeft = true) => {
   if (node === null) {
@@ -177,5 +198,4 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
   }
 };
 
-prettyPrint(myTree.rootIterative);
 prettyPrint(myTree.root);
