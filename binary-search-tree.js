@@ -246,6 +246,12 @@ class Tree {
     }
     return true;
   }
+
+  rebalance() {
+    if (this.isBalanced()) return
+    const nodes = this.inOrder(this.root)
+    this.root = this.buildTreeRecursive(nodes)
+  }
 }
 
 const testArray = [
@@ -276,7 +282,7 @@ console.log('post order', myTree.postOrder(), '\n');
 console.log('height', myTree.height(myTree.root.right));
 console.log('depth', myTree.depth(myTree.root.right), '\n');
 console.log('is balanced -->', myTree.isBalanced());
-
+myTree.rebalance()
 const prettyPrint = (node, prefix = '', isLeft = true) => {
   if (node === null) {
     return;
