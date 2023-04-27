@@ -131,13 +131,13 @@ class Tree {
 
   minValue(root) {
     let minV = root.data;
-    while (root.left != null) {
+    while (!root.left) {
       minV = root.left.data;
     }
   }
 
   find(value, currentNode = this.root) {
-    if (currentNode === null || currentNode.data === value) return currentNode;
+    if (!currentNode || currentNode.data === value) return currentNode;
     if (currentNode.data > value) {
       return this.find(value, currentNode.left);
     } else {
@@ -166,15 +166,41 @@ class Tree {
   }
 
   inOrder(func, currentNode = this.root, noFuncList = []) {
-    if (currentNode === null) return;
-    this.inOrder(func, currentNode.left);
+    if (!currentNode) return;
+    this.inOrder(func, currentNode.left, noFuncList);
     if (func && typeof func == 'function') {
       currentNode.data = func(currentNode.data);
     } else {
       noFuncList.push(currentNode.data);
     }
-    this.inOrder(func, currentNode.right);
+    this.inOrder(func, currentNode.right, noFuncList);
 
+    if (noFuncList.length > 0) return noFuncList;
+  }
+
+  preOrder(func, currentNode = this.root, noFuncList = []) {
+    if (!currentNode) return;
+    if (func && typeof func == 'function') {
+      currentNode.data = func(currentNode.data);
+    } else {
+      noFuncList.push(currentNode.data);
+    }
+    this.preOrder(func, currentNode.left, noFuncList);
+    this.preOrder(func, currentNode.right, noFuncList);
+
+    if (noFuncList.length > 0) return noFuncList;
+  }
+
+  postOrder(func, currentNode = this.root, noFuncList = []) {
+    if (!currentNode) return;
+
+    this.preOrder(func, currentNode.left, noFuncList);
+    this.preOrder(func, currentNode.right, noFuncList);
+    if (func && typeof func == 'function') {
+      currentNode.data = func(currentNode.data);
+    } else {
+      noFuncList.push(currentNode.data);
+    }
     if (noFuncList.length > 0) return noFuncList;
   }
 }
@@ -184,12 +210,6 @@ const testArray = [
 
 // [ 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 23, 43, 67, 324, 6345]
 
-const myTree = new Tree(testArray);
-myTree.insert(35);
-myTree.insert(500);
-myTree.delete(8);
-console.log('find 23 -->', myTree.find(23));
-
 function timesTwo(value) {
   return value * 2;
 }
@@ -198,11 +218,14 @@ function plusOne(value) {
   return value + 1;
 }
 
-// console.log('levelOrder', myTree.levelOrder(timesTwo));
-
+const myTree = new Tree(testArray);
+myTree.insert(500);
+myTree.delete(8);
 myTree.levelOrder(timesTwo);
 myTree.inOrder(plusOne);
-
+console.log('in order', myTree.inOrder());
+console.log('pre order', myTree.preOrder());
+console.log('post order', myTree.postOrder());
 const prettyPrint = (node, prefix = '', isLeft = true) => {
   if (node === null) {
     return;
