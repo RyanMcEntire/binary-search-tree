@@ -203,7 +203,16 @@ class Tree {
     }
     if (noFuncList.length > 0) return noFuncList;
   }
+
+  height(node) {
+    if (!node) return -1;
+    let left = this.height(node.left) + 1;
+    let right = this.height(node.right) + 1;
+
+    return Math.max(left, right);
+  }
 }
+
 const testArray = [
   1, 7, 4, 6, 23, 11, 8, 10, 9, 4, 43, 3, 5, 7, 9, 67, 6345, 324,
 ];
@@ -226,6 +235,8 @@ myTree.inOrder(plusOne);
 console.log('in order', myTree.inOrder());
 console.log('pre order', myTree.preOrder());
 console.log('post order', myTree.postOrder());
+console.log('height', myTree.height(myTree.root.right), '\n');
+
 const prettyPrint = (node, prefix = '', isLeft = true) => {
   if (node === null) {
     return;
