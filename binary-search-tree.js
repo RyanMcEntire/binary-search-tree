@@ -211,6 +211,41 @@ class Tree {
 
     return Math.max(left, right);
   }
+
+  depth(node) {
+    if (!node || node === this.root) return 0;
+    let count = 0;
+    let currentNode = this.root;
+    while (currentNode !== node) {
+      count++;
+
+      if (currentNode.data > node.data) {
+        currentNode = currentNode.left;
+      } else {
+        currentNode = currentNode.right;
+      }
+    }
+    return count;
+  }
+
+  isBalanced() {
+    if (!this.root) return;
+
+    const q = [this.root];
+    while (q.length > 0) {
+      const currentNode = q.shift();
+      if (
+        Math.abs(
+          this.height(currentNode.left) - this.height(currentNode.right)
+        ) > 1
+      ) {
+        return false;
+      }
+      if (currentNode.left) q.push(currentNode.left);
+      if (currentNode.right) q.push(currentNode.right);
+    }
+    return true;
+  }
 }
 
 const testArray = [
@@ -228,14 +263,19 @@ function plusOne(value) {
 }
 
 const myTree = new Tree(testArray);
-myTree.insert(500);
-myTree.delete(8);
+myTree.delete(23);
+myTree.insert(12);
+myTree.insert(5000);
+myTree.insert(5200);
+
 myTree.levelOrder(timesTwo);
 myTree.inOrder(plusOne);
 console.log('in order', myTree.inOrder());
 console.log('pre order', myTree.preOrder());
-console.log('post order', myTree.postOrder());
-console.log('height', myTree.height(myTree.root.right), '\n');
+console.log('post order', myTree.postOrder(), '\n');
+console.log('height', myTree.height(myTree.root.right));
+console.log('depth', myTree.depth(myTree.root.right), '\n');
+console.log('is balanced -->', myTree.isBalanced());
 
 const prettyPrint = (node, prefix = '', isLeft = true) => {
   if (node === null) {
