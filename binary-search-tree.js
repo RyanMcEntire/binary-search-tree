@@ -9,6 +9,7 @@ class Node {
 class Tree {
   constructor(array) {
     const sortedArray = this.mergeSortUnique([...new Set(array)]);
+    console.log('sorted array -->', sortedArray);
     // i am aware that for performance reasons, i'd want to
     // split up these functions and only use the one which was
     // better suited for the specific solution.
@@ -18,8 +19,6 @@ class Tree {
   }
 
   buildTreeIterative(array) {
-    console.log('sorted array -->', array);
-
     if (array.length === 0) return null;
 
     const mid = Math.floor(array.length / 2);
@@ -248,52 +247,56 @@ class Tree {
   }
 
   rebalance() {
-    if (this.isBalanced()) return
-    const nodes = this.inOrder(this.root)
-    this.root = this.buildTreeRecursive(nodes)
+    if (this.isBalanced()) return;
+    const nodes = this.inOrder(this.root);
+    this.root = this.buildTreeRecursive(nodes);
   }
 }
 
-const testArray = [
-  1, 7, 4, 6, 23, 11, 8, 10, 9, 4, 43, 3, 5, 7, 9, 67, 6345, 324,
-];
+// const testArray = [
+//   1, 7, 4, 6, 23, 11, 8, 10, 9, 4, 43, 3, 5, 7, 9, 67, 6345, 324,
+// ];
 
 // [ 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 23, 43, 67, 324, 6345]
 
-function timesTwo(value) {
-  return value * 2;
-}
+// function timesTwo(value) {
+//   return value * 2;
+// }
 
-function plusOne(value) {
-  return value + 1;
-}
+// function plusOne(value) {
+//   return value + 1;
+// }
 
-const myTree = new Tree(testArray);
-myTree.delete(23);
-myTree.insert(12);
-myTree.insert(5000);
-myTree.insert(5200);
+// const myTree = new Tree(testArray);
+// myTree.delete(23);
+// myTree.insert(12);
+// myTree.insert(5000);
+// myTree.insert(5200);
 
-myTree.levelOrder(timesTwo);
-myTree.inOrder(plusOne);
-console.log('in order', myTree.inOrder());
-console.log('pre order', myTree.preOrder());
-console.log('post order', myTree.postOrder(), '\n');
-console.log('height', myTree.height(myTree.root.right));
-console.log('depth', myTree.depth(myTree.root.right), '\n');
-console.log('is balanced -->', myTree.isBalanced());
-myTree.rebalance()
-const prettyPrint = (node, prefix = '', isLeft = true) => {
-  if (node === null) {
-    return;
-  }
-  if (node.right !== null) {
-    prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
-  }
-  console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
-  if (node.left !== null) {
-    prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
-  }
-};
+// myTree.levelOrder(timesTwo);
+// myTree.inOrder(plusOne);
+// console.log('in order', myTree.inOrder());
+// console.log('pre order', myTree.preOrder());
+// console.log('post order', myTree.postOrder(), '\n');
+// console.log('height', myTree.height(myTree.root.right));
+// console.log('depth', myTree.depth(myTree.root.right), '\n');
+// console.log('is balanced -->', myTree.isBalanced());
+// myTree.rebalance()
+// console.log('is balanced -->', myTree.isBalanced());
 
-prettyPrint(myTree.root);
+// const prettyPrint = (node, prefix = '', isLeft = true) => {
+//   if (node === null) {
+//     return;
+//   }
+//   if (node.right !== null) {
+//     prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
+//   }
+//   console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
+//   if (node.left !== null) {
+//     prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
+//   }
+// };
+
+// prettyPrint(myTree.root);
+
+module.exports = Tree;
